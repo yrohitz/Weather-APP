@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Atmos AI Weather Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#050816;
+    --card:rgba(255,255,255,0.05);
+    --border:rgba(255,255,255,0.08);
+    --text:#ffffff;
+    --muted:rgba(255,255,255,0.6);
+    --blue:#00c6ff;
+    --blue2:#0072ff;
+    --shadow:0 20px 60px rgba(0,0,0,0.45);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:linear-gradient(135deg,#07111f,#0f1729,#16243d);
+    color:white;
+}
+
+/* =========================
+BACKGROUND
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+    width:700px;
+    height:700px;
+    border-radius:50%;
+    filter:blur(120px);
+    opacity:0.35;
+    animation:float 18s infinite ease-in-out;
+}
+
+.orb1{
+    top:-250px;
+    left:-180px;
+    background:#0077ff;
+}
+
+.orb2{
+    bottom:-250px;
+    right:-180px;
+    background:#7b2ff7;
+}
+
+.orb3{
+    top:35%;
+    left:35%;
+    background:#00c6ff;
+}
+
+@keyframes float{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-40px);
+    }
+
+}
+
+.noise{
+    position:absolute;
+    inset:0;
+    background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity:0.05;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.container{
+    width:min(1400px,92%);
+    margin:auto;
+    padding:24px 0 50px;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 26px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:28px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo-icon{
+    width:58px;
+    height:58px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue2)
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:22px;
+    font-weight:800;
+
+    box-shadow:0 0 30px rgba(0,114,255,0.5);
+}
+
+.logo h1{
+    font-size:21px;
+    font-weight:800;
+}
+
+.logo p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:4px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 18px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.pulse{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ff88;
+
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+        box-shadow:0 0 0 0 rgba(0,255,136,0.7);
+    }
+
+    70%{
+        transform:scale(1.2);
+        box-shadow:0 0 0 15px rgba(0,255,136,0);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.search-box{
+    position:relative;
+    margin-bottom:28px;
+}
+
+.search-box input{
+    width:100%;
+    height:78px;
+
+    border:none;
+    outline:none;
+
+    border-radius:30px;
+
+    padding:0 190px 0 30px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:white;
+
+    font-size:17px;
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:var(--shadow);
+}
+
+.search-box input::placeholder{
+    color:rgba(255,255,255,0.4);
+}
+
+.search-btn{
+    position:absolute;
+
+    top:10px;
+    right:10px;
+
+    height:58px;
+
+    padding:0 28px;
+
+    border:none;
+
+    border-radius:22px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue2)
+    );
+}
+
+/* =========================
+HERO
+========================= */
+
+.hero{
+    display:grid;
+    grid-template-columns:1.3fr 0.9fr;
+    gap:24px;
+
+    margin-bottom:24px;
+}
+
+.panel{
+    position:relative;
+
+    overflow:hidden;
+
+    padding:34px;
+
+    border-radius:32px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:var(--shadow);
+}
+
+.city{
+    color:rgba(255,255,255,0.65);
+    font-size:20px;
+}
+
+.temp{
+    font-size:120px;
+    font-weight:900;
+    line-height:1;
+
+    margin-top:12px;
+
+    background:linear-gradient(
+        to bottom,
+        #ffffff,
+        #8ec9ff
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.condition{
+    margin-top:14px;
+
+    font-size:28px;
+
+    font-weight:700;
+}
+
+.weather-icon{
+    position:absolute;
+
+    top:35px;
+    right:35px;
+
+    width:140px;
+}
+
+.hero-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+
+    margin-top:30px;
+}
+
+.meta-chip{
+    position:relative;
+
+    overflow:hidden;
+
+    padding:14px 18px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:rgba(255,255,255,0.75);
+
+    font-size:14px;
+}
+
+/* =========================
+WIND FLOW
+========================= */
+
+.wind-chip{
+    min-width:190px;
+}
+
+.wind-text{
+    position:relative;
+    z-index:2;
+}
+
+.wind-flow{
+    position:absolute;
+    inset:0;
+}
+
+.wind-flow span{
+    position:absolute;
+
+    height:2px;
+
+    border-radius:10px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.7),
+        transparent
+    );
+
+    animation:windFlow linear infinite;
+}
+
+.wind-flow span:nth-child(1){
+    width:70px;
+    top:14px;
+    left:-80px;
+    animation-duration:2.4s;
+}
+
+.wind-flow span:nth-child(2){
+    width:45px;
+    top:28px;
+    left:-60px;
+    animation-duration:1.8s;
+    animation-delay:0.4s;
+}
+
+.wind-flow span:nth-child(3){
+    width:60px;
+    top:42px;
+    left:-70px;
+    animation-duration:2.1s;
+    animation-delay:0.8s;
+}
+
+@keyframes windFlow{
+
+    from{
+        transform:translateX(0);
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    90%{
+        opacity:1;
+    }
+
+    to{
+        transform:translateX(280px);
+        opacity:0;
+    }
+
+}
+
+/* =========================
+AI PANEL
+========================= */
+
+.ai-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.ai-icon{
+    width:64px;
+    height:64px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        135deg,
+        #7b2ff7,
+        #00c6ff
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+}
+
+.ai-title{
+    font-size:22px;
+    font-weight:800;
+}
+
+.ai-sub{
+    margin-top:5px;
+    color:var(--muted);
+}
+
+.insight-box{
+    margin-top:30px;
+
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.insight{
+    padding:20px;
+
+    border-radius:22px;
+
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:rgba(255,255,255,0.82);
+
+    line-height:1.6;
+}
+
+/* =========================
+METRICS
+========================= */
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.metric-card{
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:190px;
+
+    padding:26px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+}
+
+.metric-card:hover{
+
+    transform:translateY(-8px) scale(1.02);
+
+    border-color:rgba(255,255,255,0.14);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.5),
+        0 0 30px rgba(0,114,255,0.15);
+
+}
+
+.metric-glow{
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    border-radius:50%;
+
+    background:radial-gradient(
+        circle,
+        rgba(0,114,255,0.2),
+        transparent
+    );
+
+    top:-100px;
+    right:-100px;
+}
+
+.metric-title{
+    color:rgba(255,255,255,0.6);
+
+    margin-bottom:18px;
+}
+
+.metric-value{
+    font-size:42px;
+    font-weight:800;
+}
+
+.metric-progress{
+    width:100%;
+    height:10px;
+
+    margin-top:28px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:rgba(255,255,255,0.08);
+}
+
+.metric-progress span{
+    display:block;
+
+    height:100%;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        90deg,
+        var(--blue),
+        var(--blue2)
+    );
+}
+
+/* =========================
+WIND METRIC SPECIAL
+========================= */
+
+.metric-card.wind-metric::before,
+.metric-card.wind-metric::after{
+
+    content:"";
+
+    position:absolute;
+
+    height:2px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.7),
+        transparent
+    );
+
+    animation:windMove linear infinite;
+}
+
+.metric-card.wind-metric::before{
+
+    width:90px;
+
+    top:70px;
+
+    left:-100px;
+
+    animation-duration:2.2s;
+}
+
+.metric-card.wind-metric::after{
+
+    width:60px;
+
+    top:95px;
+
+    left:-80px;
+
+    animation-duration:1.6s;
+
+    animation-delay:0.5s;
+}
+
+.wind-extra{
+
+    position:absolute;
+
+    width:75px;
+    height:2px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.5),
+        transparent
+    );
+
+    top:120px;
+
+    left:-90px;
+
+    animation:windMove 2s linear infinite;
+
+    animation-delay:1s;
+}
+
+@keyframes windMove{
+
+    from{
+        transform:translateX(0);
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    90%{
+        opacity:1;
+    }
+
+    to{
+        transform:translateX(320px);
+        opacity:0;
+    }
+
+}
+
+/* =========================
+LOADING
+========================= */
+
+.loading{
+    position:fixed;
+    inset:0;
+
+    background:#050816;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+
+    z-index:9999;
+
+    transition:1s ease;
+}
+
+.loader{
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    border:4px solid rgba(255,255,255,0.08);
+
+    border-top-color:#00c6ff;
+
+    animation:spin 1s linear infinite;
+}
+
+.loading p{
+    margin-top:24px;
+
+    color:rgba(255,255,255,0.7);
+
+    font-size:18px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:980px){
+
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:640px){
+
+    .navbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:18px;
+    }
+
+    .temp{
+        font-size:82px;
+    }
+
+    .weather-icon{
+        width:90px;
+    }
+
+    .search-box input{
+        height:68px;
+        padding-right:20px;
+    }
+
+    .search-btn{
+        position:relative;
+        width:100%;
+        margin-top:14px;
+        top:auto;
+        right:auto;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="loading" id="loading">
+
+    <div class="loader"></div>
+
+    <p>
+        Initializing Atmospheric Intelligence...
+    </p>
+
+</div>
+
+<div class="background">
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+    <div class="noise"></div>
+
+</div>
+
+<div class="container">
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            A
+        </div>
+
+        <div>
+
+            <h1>
+                Atmos Intelligence
+            </h1>
+
+            <p>
+                AI Atmospheric Operating System
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="status">
+
+        <div class="pulse"></div>
+
+        <span>
+            Live Weather Sync
+        </span>
+
+    </div>
+
+</nav>
+
+<!-- SEARCH -->
+
+<div class="search-box">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search weather intelligence..."
+    >
+
+    <button class="search-btn" id="searchBtn">
+        Analyze Weather
+    </button>
+
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="panel">
+
+        <img
+            id="weatherIcon"
+            class="weather-icon"
+        >
+
+        <div class="city" id="city">
+            Loading...
+        </div>
+
+        <div class="temp" id="temp">
+            --
+        </div>
+
+        <div class="condition" id="condition">
+            Atmospheric Analysis...
+        </div>
+
+        <div class="hero-meta">
+
+            <div class="meta-chip" id="localtime">
+                Local Time
+            </div>
+
+            <div class="meta-chip" id="feelslike">
+                Feels Like
+            </div>
+
+            <div class="meta-chip wind-chip" id="wind">
+
+                <div class="wind-flow">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+                <div class="wind-text">
+                    Wind
+                </div>
+
+            </div>
+
+            <div class="meta-chip" id="visibility">
+                Visibility
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI PANEL -->
+
+    <div class="panel">
+
+        <div class="ai-top">
+
+            <div class="ai-icon">
+                ◎
+            </div>
+
+            <div>
+
+                <div class="ai-title">
+                    AI Weather Intelligence
+                </div>
+
+                <div class="ai-sub">
+                    Neural Atmospheric Analysis
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="insight-box" id="insights">
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- METRICS -->
+
+<section class="metrics" id="metrics">
+
+</section>
+
+</div>
+
+<script>
+
+const API_KEY =
+"e4582d5db0314c059f364104260805";
+
+const BASE_URL =
+"https://api.weatherapi.com/v1/current.json";
+
+const loading =
+document.getElementById("loading");
+
+const metrics =
+document.getElementById("metrics");
+
+const insights =
+document.getElementById("insights");
+
+const cityEl =
+document.getElementById("city");
+
+const tempEl =
+document.getElementById("temp");
+
+const conditionEl =
+document.getElementById("condition");
+
+const localtimeEl =
+document.getElementById("localtime");
+
+const feelslikeEl =
+document.getElementById("feelslike");
+
+const visibilityEl =
+document.getElementById("visibility");
+
+const weatherIcon =
+document.getElementById("weatherIcon");
+
+const windEl =
+document.getElementById("wind");
+
+const searchBtn =
+document.getElementById("searchBtn");
+
+const searchInput =
+document.getElementById("searchInput");
+
+/* =========================
+FETCH WEATHER
+========================= */
+
+async function fetchWeather(city = "London") {
+
+    try {
+
+        loading.style.opacity = "1";
+
+        const response = await fetch(
+            `${BASE_URL}?key=${API_KEY}&q=${city}&aqi=yes`
+        );
+
+        const data = await response.json();
+
+        if(data.error){
+
+            alert(data.error.message);
+            return;
+
+        }
+
+        updateUI(data);
+
+        setTimeout(() => {
+
+            loading.style.opacity = "0";
+            loading.style.pointerEvents = "none";
+
+        }, 700);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Failed to fetch weather data.");
+
+    }
+
+}
+
+/* =========================
+UPDATE UI
+========================= */
+
+function updateUI(data){
+
+    const current =
+    data.current;
+
+    const location =
+    data.location;
+
+    cityEl.innerHTML =
+    `${location.name}, ${location.country}`;
+
+    animateValue(
+        tempEl,
+        0,
+        current.temp_c,
+        1200,
+        "°"
+    );
+
+    conditionEl.innerHTML =
+    current.condition.text;
+
+    localtimeEl.innerHTML =
+    `Local Time • ${location.localtime}`;
+
+    feelslikeEl.innerHTML =
+    `Feels Like • ${current.feelslike_c}°C`;
+
+    visibilityEl.innerHTML =
+    `Visibility • ${current.vis_km} km`;
+
+    const windText =
+    windEl.querySelector(".wind-text");
+
+    windText.innerHTML =
+    `Wind • ${current.wind_kph} km/h`;
+
+    weatherIcon.src =
+    "https:" + current.condition.icon;
+
+    generateInsights(current);
+
+    generateMetrics(current);
+
+}
+
+/* =========================
+TEMP ANIMATION
+========================= */
+
+function animateValue(
+    element,
+    start,
+    end,
+    duration,
+    suffix=""
+){
+
+    let startTime = null;
+
+    function update(currentTime){
+
+        if(!startTime){
+
+            startTime = currentTime;
+
+        }
+
+        const progress =
+        Math.min(
+            (currentTime - startTime)
+            / duration,
+            1
+        );
+
+        const value =
+        Math.floor(
+            progress * (end - start)
+            + start
+        );
+
+        element.textContent =
+        value + suffix;
+
+        if(progress < 1){
+
+            requestAnimationFrame(update);
+
+        }
+
+    }
+
+    requestAnimationFrame(update);
+
+}
+
+/* =========================
+AI INSIGHTS
+========================= */
+
+function generateInsights(current){
+
+    insights.innerHTML = "";
+
+    const aiInsights = [];
+
+    if(current.uv > 7){
+
+        aiInsights.push(
+        "High ultraviolet radiation detected across atmospheric layers.");
+
+    }
+
+    if(current.humidity > 70){
+
+        aiInsights.push(
+        "Elevated atmospheric moisture detected in the environment.");
+
+    }
+
+    if(current.wind_kph > 20){
+
+        aiInsights.push(
+        "Strong wind movement currently flowing through the region.");
+
+    }
+
+    if(current.air_quality.pm2_5 < 35){
+
+        aiInsights.push(
+        "Air quality remains stable for outdoor activities.");
+
+    }
+
+    if(aiInsights.length === 0){
+
+        aiInsights.push(
+        "Optimal environmental conditions detected.");
+
+    }
+
+    aiInsights.forEach(text=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "insight";
+
+        card.innerHTML =
+        text;
+
+        insights.appendChild(card);
+
+    });
+
+}
+
+/* =========================
+METRIC CARD
+========================= */
+
+function metricCard(
+    title,
+    value,
+    progress
+){
+
+    return `
+
+    <div class="metric-card">
+
+        <div class="metric-glow"></div>
+
+        <div class="metric-title">
+            ${title}
+        </div>
+
+        <div class="metric-value">
+            ${value}
+        </div>
+
+        <div class="metric-progress">
+            <span style="width:${progress}%"></span>
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+/* =========================
+GENERATE METRICS
+========================= */
+
+function generateMetrics(current){
+
+    metrics.innerHTML = "";
+
+    metrics.innerHTML += metricCard(
+        "Humidity",
+        current.humidity + "%",
+        current.humidity
+    );
+
+    metrics.innerHTML += metricCard(
+        "UV Index",
+        current.uv,
+        current.uv * 10
+    );
+
+    metrics.innerHTML += metricCard(
+        "Pressure",
+        current.pressure_mb + " mb",
+        80
+    );
+
+    metrics.innerHTML += metricCard(
+        "Cloud Cover",
+        current.cloud + "%",
+        current.cloud
+    );
+
+    metrics.innerHTML += metricCard(
+        "Feels Like",
+        current.feelslike_c + "°",
+        current.feelslike_c
+    );
+
+    /* WIND CARD */
+
+    metrics.innerHTML += `
+
+    <div class="metric-card wind-metric">
+
+        <div class="metric-glow"></div>
+
+        <div class="wind-extra"></div>
+
+        <div class="metric-title">
+            Wind Speed
+        </div>
+
+        <div class="metric-value">
+            ${current.wind_kph} km/h
+        </div>
+
+        <div class="metric-progress">
+            <span style="width:${current.wind_kph}%"></span>
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+/* =========================
+SEARCH EVENTS
+========================= */
+
+searchBtn.addEventListener(
+    "click",
+    ()=>{
+
+        const city =
+        searchInput.value.trim();
+
+        if(city){
+
+            fetchWeather(city);
+
+        }
+
+    }
+);
+
+searchInput.addEventListener(
+    "keypress",
+    (e)=>{
+
+        if(e.key === "Enter"){
+
+            const city =
+            searchInput.value.trim();
+
+            if(city){
+
+                fetchWeather(city);
+
+            }
+
+        }
+
+    }
+);
+
+/* =========================
+INITIAL LOAD
+========================= */
+
+window.addEventListener(
+    "load",
+    ()=>{
+
+        fetchWeather();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
