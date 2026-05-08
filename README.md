@@ -41,11 +41,13 @@ A responsive weather application built with HTML, CSS, and JavaScript that allow
 ```
 
 ## 📁 Project Structure
+```
 weather-app/
 │
 ├── index.html       # Main HTML + JS file
 ├── README.md        # Project documentation
 └── .git/            # Git tracking folder
+
 
 ## 🙋‍♂️ Author
 
