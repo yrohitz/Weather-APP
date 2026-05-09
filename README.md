@@ -10,7 +10,7 @@ A responsive weather application built with HTML, CSS, and JavaScript that allow
 - ⌨️ Press **Enter** to search instantly
 - 📱 Fully responsive design for all screen sizes
 
-## 🛠️ Built With
+# 🛠️ Built With
 
 - **HTML5** — Structure
 - **CSS3** — Styling & Animations
