@@ -2,7 +2,7 @@
 
 A responsive weather application built with HTML, CSS, and JavaScript that allows users to search for real-time weather information of any city around the world.
 
-## 🚀 Features
+# 🚀 Features
 
 - 🔍 Search weather by city name
 - 🌡️ Displays temperature, humidity, and wind speed
