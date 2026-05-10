@@ -1,16 +1,16 @@
-# 🌤️ Weather App
+## 🌤️ Weather App
 
 A responsive weather application built with HTML, CSS, and JavaScript that allows users to search for real-time weather information of any city around the world.
 
-# 🚀 Features
+## 🚀 Features
 
-- 🔍 Search weather by city name
+- 🔍 Search weather by city names
 - 🌡️ Displays temperature, humidity, and wind speed
 - 🌥️ Shows weather condition with icons
 - ⌨️ Press **Enter** to search instantly
 - 📱 Fully responsive design for all screen sizes
 
-# 🛠️ Built With
+## 🛠️ Built With
 
 - **HTML5** — Structure
 - **CSS3** — Styling & Animations
