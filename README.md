@@ -17,11 +17,11 @@ A responsive weather application built with HTML, CSS, and JavaScript that allow
 - **JavaScript (Vanilla)** — Logic & API calls
 - **OpenWeatherMap API** — Real-time weather data
 
-## 📸 Screenshots
+# 📸 Screenshots
 
 > Add your app screenshots here
 
-## ⚙️ How to Use
+# ⚙️ How to Use
 
 1. Clone the repository:
 ```bash
@@ -31,7 +31,7 @@ A responsive weather application built with HTML, CSS, and JavaScript that allow
 3. Type any city name in the search bar and press **Enter**
 4. View real-time weather details instantly
 
-## 🔑 API Setup
+# 🔑 API Setup
 
 1. Go to [openweathermap.org](https://openweathermap.org/) and create a free account
 2. Generate your **API Key**
